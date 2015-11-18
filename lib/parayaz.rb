@@ -1,16 +1,18 @@
 require 'parayaz/version'
 
 module Parayaz
-  def parayaz
-    number = self
-    minus = number < 0
+  def parayaz(currency="TL")
+    @number = self
+    @currency = currency
 
-    number *= -1 if minus
+    minus = @number < 0
 
-    price, cents = number.to_s.split('.')
+    @number *= -1 if minus
+
+    price, cents = @number.to_s.split('.')
 
     text = convert_to_text(price)
-    text += 'TL' unless text.empty?
+    text += " #{@currency}" unless text.empty?
 
     if cents && cents.to_i > 0
       if cents.size == 1
@@ -20,33 +22,33 @@ module Parayaz
         cents = cents[0..1]
       end
       text += ',' unless text.empty?
-      text += convert_to_text(cents) + 'kr.'
+      text += convert_to_text(cents) + ((@currency == "TL") ? " Kr." : " Cents")
     end
 
-    (minus ? 'eksi ' : '') + text
+    (minus ? '(Eksi)' : '') + text
   end
 
   private
   def say_1_digit_text(n)
-    one_digits_text = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz']
+    one_digits_text = ['', 'Bir', 'İki', 'Üç', 'Dört', 'Beş', 'Altı', 'Yedi', 'Sekiz', 'Dokuz']
     one_digits_text[n]
   end
 
   def say_2_digit_text(n)
-    two_digits_text = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan']
+    two_digits_text = ['', 'On', 'Yirmi', 'Otuz', 'Kırk', 'Elli', 'Altmış', 'Yetmiş', 'Seksen', 'Doksan']
     two_digits_text[n[0]] + say_1_digit_text(n[1])
   end
 
   def say_3_digit_text(n)
-    one = n[0] == 1 ? 'yüz' : say_1_digit_text(n[0])
-    one += 'yüz' unless n[0] == 1 || n[0] == 0
+    one = n[0] == 1 ? 'Yüz' : say_1_digit_text(n[0])
+    one += 'Yüz' unless n[0] == 1 || n[0] == 0
     n.delete_at(0)
     one + say_2_digit_text(n)
   end
 
   def convert_to_text(number)
     number = number.to_i
-    lots = ['', 'bin', 'milyon', 'milyar', 'trilyon', 'katrilyon', 'kentilyon', 'seksilyon', 'septilyon']
+    lots = ['', 'Bin', 'Milyon', 'Milyar', 'Trilyon', 'Katrilyon', 'Kentilyon', 'Seksilyon', 'Septilyon']
 
     text = ''
 
