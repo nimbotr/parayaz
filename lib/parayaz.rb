@@ -1,7 +1,7 @@
 require 'parayaz/version'
 
 module Parayaz
-  def parayaz(currency="TL")
+  def parayaz(currency="Türk Lirası")
     @number = self
     @currency = currency
 
@@ -22,7 +22,7 @@ module Parayaz
         cents = cents[0..1]
       end
       text += ',' unless text.empty?
-      text += convert_to_text(cents) + ((@currency == "TL") ? " Kr." : " Cents")
+      text += convert_to_text(cents) + ((@currency == "Türk Lirası") ? " Kuruş" : " Cents")
     end
 
     (minus ? '(Eksi)' : '') + text
