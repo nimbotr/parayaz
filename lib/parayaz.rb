@@ -22,9 +22,8 @@ module Parayaz
         cents = cents[0..1]
       end
       text += ',' unless text.empty?
-      text += convert_to_text(cents) + ((@currency == "Türk Lirası") ? " Kuruş" : " Cents")
+      text += convert_to_text(cents) + ((@currency.in?(["Türk Lirası","TRY","TRL","TL"])) ? " Kuruş" : " Cents")
     end
-
     (minus ? '(Eksi)' : '') + text
   end
 
